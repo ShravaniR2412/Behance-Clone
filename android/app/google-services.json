@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1080197303204",
+    "project_id": "behance-665f1",
+    "storage_bucket": "behance-665f1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080197303204:android:24b076b64e161cb3e2cf31",
+        "android_client_info": {
+          "package_name": "com.example.behnace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClX4RMbgWlQp8jeLnotQqSMTGxPAA0RPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

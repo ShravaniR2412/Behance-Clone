@@ -1,16 +1,35 @@
-# behnace
+# 🎨 Behance Flutter App
 
-A new Flutter project.
+## 🌟 Overview
+This is a **Flutter-based** mobile application that integrates with **Firebase** as its backend. Users can **create accounts, open profiles, add project details and images, explore artwork, search for famous artworks (e.g., Mona Lisa, Van Gogh), and connect with users with similar profiles.**
 
-## Getting Started
+## ✨ Features
 
-This project is a starting point for a Flutter application.
+### 🔐 **User Authentication**
+- ✅ Sign up using **Firebase Authentication**
+- 🔄 Login/logout functionality
+- 🛠 Profile management
 
-A few resources to get you started if this is your first Flutter project:
+### 👤 **User Profile & Projects**
+- 📂 Users can create and update their **profile**
+- 🖼 Upload **profile picture** and other details
+- 🎨 Add new **projects**, including:
+  - 🏷 **Project title**
+  - 📝 **Description**
+  - 📷 **Image uploads**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 🖌 **Art Exploration & Search**
+- 🔍 Browse and explore other users' **art projects**
+- 🏛 Search for specific **artworks or artists** (e.g., Mona Lisa, Van Gogh)
+- 📡 Fetch artwork details from **Rijksmuseum API**
+- 🌐 API Used: `https://www.rijksmuseum.nl/api/en/collection?key=88VweNDG&q=$query&format=json`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 🔗 **Networking & Connections**
+- 👥 View other users' profiles
+- 🤝 Connect with users having similar interests
+
+## 🛠 Tech Stack
+- 🎯 **Flutter** (Frontend)
+- 🔥 **Firebase** (Backend & Authentication)
+- 🖼 **Rijksmuseum API** (Fetching artworks and artist details)
+

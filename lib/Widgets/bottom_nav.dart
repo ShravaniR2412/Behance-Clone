@@ -6,7 +6,7 @@ import 'package:behnace/Screens/ProjectInfo.dart';
 import 'package:flutter/material.dart';
 import '../Screens/Home.dart';  // Import HomePage
 import '../Screens/Profile.dart'; // Import ProfilePage
-
+import '../Screens/AddProject.dart';
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -34,7 +34,7 @@ class BottomNavBar extends StatelessWidget {
     }else if (index == 3) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ArtistDetails()),
+        MaterialPageRoute(builder: (context) => ProfilePage()),
       );
     }
   }

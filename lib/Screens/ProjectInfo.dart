@@ -62,16 +62,22 @@ class _ProjectInfoState extends State<ProjectInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Behance-like dark theme
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(widget.projectTitle),
+        title: Text(
+          widget.projectTitle,
+          style: const TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        elevation: 0,
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator(color: Colors.white))
-          : projectDetails != null
+      body: projectDetails != null
           ? SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -87,19 +93,19 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   fit: BoxFit.cover,
                 ),
               ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // 🔹 Title + Likes, Comments, Views (Dummy values for now)
             Text(
               projectDetails!['title'],
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Row(
-              children: [
+              children: const [
                 Icon(Icons.thumb_up, color: Colors.white, size: 18),
                 SizedBox(width: 5),
                 Text("408", style: TextStyle(color: Colors.white)),
@@ -114,62 +120,62 @@ class _ProjectInfoState extends State<ProjectInfo> {
                 Text("4,910", style: TextStyle(color: Colors.white)),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // 🔹 Description
-            Text(
+            const Text(
               "Description",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
               projectDetails!['description'],
-              style: TextStyle(fontSize: 16, color: Colors.white70),
+              style: const TextStyle(fontSize: 16, color: Colors.white70),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // 🔹 Tools Used
-            Text(
+            const Text(
               "Tools Used",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               padding:
-              EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
                 color: Colors.grey[800],
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 projectDetails!['toolsUsed'],
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // 🔹 Creative Fields
-            Text(
+            const Text(
               "Creative Fields",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Wrap(
               spacing: 8.0,
               runSpacing: 8.0,
               children: (projectDetails!['creativeFields'] as List<dynamic>)
                   .map(
                     (field) => Container(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                       vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     color: Colors.grey[800],
@@ -177,14 +183,14 @@ class _ProjectInfoState extends State<ProjectInfo> {
                   ),
                   child: Text(
                     field,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 16, color: Colors.white),
                   ),
                 ),
               )
                   .toList(),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // 🔹 Additional Images
             if (projectDetails!['imageLinks'] != null &&
@@ -192,21 +198,21 @@ class _ProjectInfoState extends State<ProjectInfo> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "More Images",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Column(
                     children: (projectDetails!['imageLinks']
                     as List<dynamic>)
                         .skip(1) // Skipping first image
                         .map(
                           (img) => Padding(
-                        padding: EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.network(
@@ -225,7 +231,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
           ],
         ),
       )
-          : Center(
+          : const Center(
         child: Text("Project details not found",
             style: TextStyle(fontSize: 18, color: Colors.white)),
       ),

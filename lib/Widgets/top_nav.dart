@@ -1,10 +1,7 @@
-import 'package:behnace/Screens/Connect.dart';
 import 'package:flutter/material.dart';
 import '../Screens/ForYou.dart';
 import '../Screens/Connect.dart';
 import '../Screens/Creatives.dart'; // Ensure the correct import for CreativesPage
-import '../Screens/AboutInfo.dart'; // Ensure this file contains AboutInfoPage
-import '../Screens/ArtistDetails.dart';
 import '../Widgets/view.dart';
 
 class TopNavBar extends StatelessWidget {
@@ -16,78 +13,71 @@ class TopNavBar extends StatelessWidget {
       margin: const EdgeInsets.only(top: 30),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       color: Colors.black,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center, // Center the content horizontally
         children: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              // Implement search functionality here
-            },
-          ),
-
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Explore",
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ForYouPage()),
-                      );
-                    },
-                    child: const Text(
-                      "For You",
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CreativesPage()),
-                      );
-                    },
-                    child: const Text(
-                      "Following",
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ModelGridPage()), // Ensure ConnectPage exists
-                      );
-                    },
-                    child: const Text(
-                      "Connect",
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
-                    ),
-                  ),
-                ],
-              ),
+          // Behance Text on Top
+          const Text(
+            "Behance",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24, // Adjust the size as needed
+              fontWeight: FontWeight.bold, // Make it stand out
             ),
           ),
+          const SizedBox(height: 8), // Spacing between "Behance" and the navigation items
 
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CreativesPage()), // Ensure CreativesPage exists
-              );
-            },
+          // Navigation Items
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, // Center the navigation items
+              children: [
+                const Text(
+                  "Explore",
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreativesPage()),
+                    );
+                  },
+                  child: const Text(
+                    "Creatives",
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ForYouPage()),
+                    );
+                  },
+                  child: const Text(
+                    "Find",
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ModelGridPage()), // Ensure ConnectPage exists
+                    );
+                  },
+                  child: const Text(
+                    "GalleryView",
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -72,13 +72,10 @@ class _CreativesPageState extends State<CreativesPage> {
           "Creatives",
           style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
         ),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: Colors.white),
             onPressed: () {},
           ),
         ],

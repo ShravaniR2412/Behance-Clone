@@ -45,6 +45,10 @@ class _ForYouPageState extends State<ForYouPage> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         elevation: 0,
       ),
       body: Column(

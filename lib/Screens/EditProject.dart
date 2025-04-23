@@ -3,19 +3,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Widgets/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-class AddProjectPage extends StatefulWidget {
+class EditProjectPage extends StatefulWidget {
+  final Map<String, dynamic> project;
+  final String projectId;
+
+  EditProjectPage({required this.project, required this.projectId});
+
   @override
-  _AddProjectPageState createState() => _AddProjectPageState();
+  _EditProjectPageState createState() => _EditProjectPageState();
 }
 
-class _AddProjectPageState extends State<AddProjectPage> {
-  final List<TextEditingController> _imageLinks = [TextEditingController()];
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _taglineController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _toolsUsedController = TextEditingController();
-  final List<String> _creativeFields = [];
-  final TextEditingController _creativeFieldController = TextEditingController();
+class _EditProjectPageState extends State<EditProjectPage> {
+  List<TextEditingController> _imageLinks = [];
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _taglineController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _toolsUsedController = TextEditingController();
+  List<String> _creativeFields = [];
+  TextEditingController _creativeFieldController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with project data
+    _titleController.text = widget.project['title'] ?? '';
+    _taglineController.text = widget.project['tagline'] ?? '';
+    _descriptionController.text = widget.project['description'] ?? '';
+    _toolsUsedController.text = widget.project['toolsUsed'] ?? '';
+    _creativeFields = List<String>.from(widget.project['creativeFields'] ?? []);
+
+    // Initialize image links
+    List<dynamic> imageLinksData = widget.project['imageLinks'] ?? [];
+    _imageLinks = imageLinksData.map((link) => TextEditingController(text: link.toString())).toList();
+    if (_imageLinks.isEmpty) {
+      _imageLinks.add(TextEditingController());
+    }
+  }
 
   void _addImageLink() {
     setState(() {
@@ -49,7 +72,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     );
   }
 
-  Future<void> _submitForm() async {
+  Future<void> _updateForm() async {
     if (_titleController.text.isEmpty ||
         _taglineController.text.isEmpty ||
         _imageLinks.any((controller) => controller.text.isEmpty) ||
@@ -71,18 +94,8 @@ class _AddProjectPageState extends State<AddProjectPage> {
     try {
       DocumentReference userDocRef = FirebaseFirestore.instance.collection('project').doc(email);
 
-      DocumentSnapshot docSnapshot = await userDocRef.get();
-      Map<String, dynamic> existingProjects = {};
-
-      if (docSnapshot.exists) {
-        existingProjects = (docSnapshot.data() as Map<String, dynamic>?)?['projectDetails'] as Map<String, dynamic>? ?? {};
-      }
-
-      int nextIndex = existingProjects.keys.isEmpty
-          ? 0
-          : existingProjects.keys.map(int.parse).reduce((a, b) => a > b ? a : b) + 1;
-
-      Map<String, dynamic> newProject = {
+      // Prepare updated project data
+      Map<String, dynamic> updatedProject = {
         "title": _titleController.text,
         "tagline": _taglineController.text,
         "imageLinks": imageLinks,
@@ -92,40 +105,38 @@ class _AddProjectPageState extends State<AddProjectPage> {
         "timestamp": FieldValue.serverTimestamp(),
       };
 
-      existingProjects["$nextIndex"] = newProject;
+      // Update the project in Firestore
+      DocumentSnapshot docSnapshot = await userDocRef.get();
+      if (docSnapshot.exists) {
+        Map<String, dynamic> existingProjects = (docSnapshot.data() as Map<String, dynamic>?)?['projectDetails'] as Map<String, dynamic>? ?? {};
 
-      await userDocRef.set({
-        "email": email,
-        "projectDetails": existingProjects,
-      }, SetOptions(merge: true));
+        existingProjects[widget.projectId] = updatedProject; // Update existing project
 
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: Colors.grey[900],
-          title: Text("Success", style: TextStyle(color: Colors.white)),
-          content: Text("Project saved successfully!", style: TextStyle(color: Colors.white70)),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("OK", style: TextStyle(color: Colors.blue[400])),
-            ),
-          ],
-        ),
-      );
+        await userDocRef.set({
+          "email": email,
+          "projectDetails": existingProjects,
+        }, SetOptions(merge: true));
 
-      _titleController.clear();
-      _taglineController.clear();
-      _descriptionController.clear();
-      _toolsUsedController.clear();
-      _creativeFields.clear();
-      setState(() {
-        _imageLinks.clear();
-        _imageLinks.add(TextEditingController());
-      });
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Colors.grey[900],
+            title: Text("Success", style: TextStyle(color: Colors.white)),
+            content: Text("Project updated successfully!", style: TextStyle(color: Colors.white70)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("OK", style: TextStyle(color: Colors.blue[400])),
+              ),
+            ],
+          ),
+        );
+      } else {
+        _showErrorDialog("User document not found.");
+      }
 
     } catch (e) {
-      _showErrorDialog("Failed to save project: $e");
+      _showErrorDialog("Failed to update project: $e");
     }
   }
 
@@ -135,7 +146,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text(
-          "Add New Project",
+          "Edit Project",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -194,56 +205,34 @@ class _AddProjectPageState extends State<AddProjectPage> {
               Row(
                 children: [
                   Expanded(
-                    child: _buildTextInput(_creativeFieldController, "Add a field (e.g. Graphic Design)"),
+                    child: _buildTextInput(
+                      _creativeFieldController,
+                      "Enter creative field",
+                    ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.blue, size: 28),
+                    icon: const Icon(Icons.add, color: Colors.white),
                     onPressed: _addCreativeField,
                   ),
                 ],
               ),
-              if (_creativeFields.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: _creativeFields.map((field) => Chip(
-                    label: Text(field, style: const TextStyle(color: Colors.white)),
-                    backgroundColor: Colors.blue[800],
-                    deleteIcon: const Icon(Icons.close, size: 16),
-                    onDeleted: () {
-                      setState(() {
-                        _creativeFields.remove(field);
-                      });
-                    },
-                  )).toList(),
-                ),
-              ],
+              Wrap(
+                children: _creativeFields
+                    .map((field) => Chip(
+                  label: Text(
+                    field,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.grey[800],
+                ))
+                    .toList(),
+              ),
 
               // Submit Button
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[600],
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    "PUBLISH PROJECT",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-              ),
               const SizedBox(height: 20),
+              Center(
+                child: _buildSubmitButton("Update", _updateForm),
+              ),
             ],
           ),
         ),
@@ -251,66 +240,75 @@ class _AddProjectPageState extends State<AddProjectPage> {
     );
   }
 
-  Widget _buildTextInput(TextEditingController controller, String hint, {int maxLines = 1}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+  Widget _buildTextInput(TextEditingController controller, String label, {int maxLines = 1}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
       child: TextField(
         controller: controller,
         maxLines: maxLines,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(color: Colors.grey[500]),
-          filled: true,
-          fillColor: Colors.grey[900],
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white70),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: Colors.grey[700]!),
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey[700]!),
           ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue),
+          ),
+          filled: true,
+          fillColor: Colors.grey[800],
         ),
       ),
     );
   }
 
   Widget _buildAddButton(String text, VoidCallback onPressed, {IconData? icon}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
       child: OutlinedButton.icon(
         onPressed: onPressed,
-        icon: Icon(icon ?? Icons.add, color: Colors.blue[400], size: 20),
+        icon: Icon(icon, color: Colors.blue[400]),
         label: Text(
           text,
-          style: TextStyle(
-            color: Colors.blue[400],
-            fontWeight: FontWeight.w500,
-          ),
+          style: TextStyle(color: Colors.blue[400]),
         ),
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: Colors.blue[400]!),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton(String text, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue[400],
+        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: Colors.white,
         ),
       ),
     );
   }
 
   Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-          letterSpacing: 0.5,
-        ),
+    return Text(
+      title,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 18,
+        color: Colors.white,
       ),
     );
   }

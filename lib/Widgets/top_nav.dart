@@ -5,6 +5,7 @@ import '../Screens/Connect.dart';
 import '../Screens/Creatives.dart'; // Ensure the correct import for CreativesPage
 import '../Screens/AboutInfo.dart'; // Ensure this file contains AboutInfoPage
 import '../Screens/ArtistDetails.dart';
+import '../Widgets/view.dart';
 
 class TopNavBar extends StatelessWidget {
   const TopNavBar({Key? key}) : super(key: key);
@@ -66,7 +67,7 @@ class TopNavBar extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ConnectPage()), // Ensure ConnectPage exists
+                        MaterialPageRoute(builder: (context) => ModelGridPage()), // Ensure ConnectPage exists
                       );
                     },
                     child: const Text(

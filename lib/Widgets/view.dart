@@ -84,6 +84,39 @@ class ModelGridPageState extends State<ModelGridPage> {
       'The Starry Night is an oil on canvas painting by Dutch Post-Impressionist painter Vincent van Gogh. Painted in June 1889, it depicts the view from the east-facing window of his asylum room at Saint-Rémy-de-Provence.',
       description: 'A painting from the post-impressionist painter.',
     ),
+    ModelData(
+      name: 'The Starry Night Diorama',
+      assetPath: 'assets/models/starry_night_diorama_tilt_brush.glb',
+      thumbnail:
+      'https://c4.wallpaperflare.com/wallpaper/821/500/941/painting-vincent-van-gogh-abstract-the-starry-night-wallpaper-preview.jpg',
+      artist: 'Vincent van Gogh',
+      date: '1889',
+      history:
+      'Painted while van Gogh was in an asylum in Saint-Rémy, "The Starry Night" is one of the most recognized pieces of art in the world, showcasing his swirling, dreamy vision of the night sky.',
+      description: 'A mesmerizing view of the night sky from van Gogh’s asylum room window.',
+    ),
+    ModelData(
+      name: 'Art Studio',
+      assetPath: 'assets/models/art_studio.glb',
+      thumbnail:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREX88riT8_g0UBOA1zW4yKAztkxTjbW-axoA&s',
+      artist: 'Digital Artist (Sketchfab)',
+      date: '2021',
+      history:
+      'A 3D representation of a classic art studio, featuring easels, canvases, and creative chaos. Ideal for virtual environments and artistic storytelling.',
+      description: 'A charming digital rendition of a painter’s workspace.',
+    ),
+    ModelData(
+      name: 'Art Gallery',
+      assetPath: 'assets/models/richards_art_gallery.glb',
+      thumbnail:
+      'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/56/cd/3d/tanzara-art-gallery.jpg?w=900&h=500&s=1',
+      artist: 'Richard Davis (Sketchfab)',
+      date: '2022',
+      history:
+      'This 3D gallery setup allows viewers to virtually navigate through an art exhibition. Designed for VR and AR experiences to showcase artwork in immersive environments.',
+      description: 'An interactive 3D space mimicking a modern art exhibition.',
+    ),
   ];
 
   ModelData? selectedModel;
